@@ -1,6 +1,8 @@
 # Notes
 
 * confidentiality, integrity, and availability of data," or the CIA triad
+* As previously discussed, banner grabbing is a useful technique to fingerprint a service quickly. Often a service will look to identify itself by displaying a banner once a connection is initiated.
+* As previously discussed, banner grabbing is a useful technique to fingerprint a service quickly. Often a service will look to identify itself by displaying a banner once a connection is initiated. nmap and nc can do this
 
 Step | Explanation
 -----|-------------
@@ -51,17 +53,23 @@ Port(s) | Protocol
 9. 	Using Components with Known Vulnerabilities 	All of the components used by an application (libraries, frameworks, software modules) run with the same privilege as the application. If the application uses components with known flaws, it may lead to sensitive data exposure or remote code execution.
 10. 	Insufficient Logging & Monitoring 	Deficiencies in logging & monitoring may allow a successful attack to go unnoticed, for attackers to establish persistence in the network, or tamper with or extract sensitive data without being noticed.
 
-It is essential to become familiar with each of these categories and the various vulnerabilities that fit each. Web application vulnerabilities will be covered in-depth in later modules. To learn more about web applications, check out the Introduction to Web Applications module.
-Table of Contents
-Introduction
-Setup
-Pentesting Basics
-Getting Started with Hack The Box (HTB)
-Attacking Your First Box
-Problem Solving
-What's Next?
-My Workstation
+## nmap scripts
 
-OFFLINE
+* -sC is used to specify a script (default)
+* nmap --script <script name> -p<port> <host>
 
-1 / 1 spawns left
+## ftp
+
+* We see that FTP supports common commands such as cd and ls and allows us to download files using the get command. Inspection of the downloaded login.txt reveals credentials that we could use to further our access to the system.
+
+## SMB
+* MB (Server Message Block) is a prevalent protocol on Windows machines that provides many vectors for vertical and lateral movement. 
+* some SMB versions may be vulnerable to RCE exploits such as EternalBlue
+*  Nmap has many scripts for enumerating SMB, such as smb-os-discovery.nse, which will interact with the SMB service to extract the reported operating system version.
+
+## Shares
+* SMB allows users and administrators to share folders and make them accessible remotely by other users.
+* A tool that can enumerate and interact with SMB shares is smbclient. The -L flag specifies that we want to retrieve a list of available shares on the remote host, while -N suppresses the password prompt.
+
+## SNMP
+* SNMP Community strings provide information and statistics about a router or device, helping us gain access to it.
