@@ -3,6 +3,7 @@
 * confidentiality, integrity, and availability of data," or the CIA triad
 * As previously discussed, banner grabbing is a useful technique to fingerprint a service quickly. Often a service will look to identify itself by displaying a banner once a connection is initiated.
 * As previously discussed, banner grabbing is a useful technique to fingerprint a service quickly. Often a service will look to identify itself by displaying a banner once a connection is initiated. nmap and nc can do this
+* When performing service scanning, we will often run into web servers running on ports 80 and 443
 
 Step | Explanation
 -----|-------------
@@ -73,3 +74,18 @@ Port(s) | Protocol
 
 ## SNMP
 * SNMP Community strings provide information and statistics about a router or device, helping us gain access to it.
+
+## Gobuster
+
+* For directory enumeration
+* gobuster dir -u http://10.10.10.121/ -w /usr/share/dirb/wordlists/common.txt
+* DNS Subdomain Enumeration
+** Used to get things like admin pages gobuster dns -d inlanefreight.com -w /usr/share/SecLists/Discovery/DNS/namelist.txt
+
+## Banner Grabbing / Web Server Headers
+
+In the last section, we discussed banner grabbing for general purposes. Web server headers provide a good picture of what is hosted on a web server. They can reveal the specific application framework in use, the authentication options, and whether the server is missing essential security options or has been misconfigured. We can use cURL to retrieve server header information from the command line. cURL is another essential addition to our penetration testing toolkit, and familiarity with its many options is encouraged
+
+## WhatWeb
+
+We can extract the version of web servers, supporting frameworks, and applications using the command-line tool whatweb. This information can help us pinpoint the technologies in use and begin to search for potential vulnerabilities.
