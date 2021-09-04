@@ -89,3 +89,17 @@ In the last section, we discussed banner grabbing for general purposes. Web serv
 ## WhatWeb
 
 We can extract the version of web servers, supporting frameworks, and applications using the command-line tool whatweb. This information can help us pinpoint the technologies in use and begin to search for potential vulnerabilities.
+
+## Metasploit
+
+* run using ` msfconsole `
+* ` search exploit <name> ` can be used to find an exploit
+* ` show options` find what it needs/can do
+
+
+## Public Exploits (TASK)
+
+1. scan the website using `gobuster` to find that it is a wordpress site
+2. `msfconsole` to start metasploit
+3. `search simple backup 2.7.10` found what to search by reading the website
+4. use the exploit scanner on metasploit to read /flags.txt
