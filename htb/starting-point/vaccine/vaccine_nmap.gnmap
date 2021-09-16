@@ -1,0 +1,4 @@
+# Nmap 7.91 scan initiated Thu Sep 16 14:58:54 2021 as: nmap -sC -sV -oA vaccine_nmap -Pn 10.10.10.46
+Host: 10.10.10.46 ()	Status: Up
+Host: 10.10.10.46 ()	Ports: 21/open/tcp//ftp//vsftpd 3.0.3/, 22/open/tcp//ssh//OpenSSH 8.0p1 Ubuntu 6build1 (Ubuntu Linux; protocol 2.0)/, 80/open/tcp//http//Apache httpd 2.4.41 ((Ubuntu))/	Ignored State: closed (997)
+# Nmap done at Thu Sep 16 14:59:32 2021 -- 1 IP address (1 host up) scanned in 38.06 seconds
