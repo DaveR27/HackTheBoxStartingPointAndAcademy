@@ -1,0 +1,47 @@
+# Nmap 7.91 scan initiated Fri Sep 17 17:49:13 2021 as: nmap -sV -sC -oA pathfinder_nmap -Pn 10.10.10.30
+Nmap scan report for 10.10.10.30
+Host is up (0.31s latency).
+Not shown: 971 closed ports
+PORT      STATE    SERVICE        VERSION
+53/tcp    open     domain         Simple DNS Plus
+88/tcp    open     kerberos-sec   Microsoft Windows Kerberos (server time: 2021-09-18 05:04:25Z)
+135/tcp   open     msrpc          Microsoft Windows RPC
+139/tcp   open     netbios-ssn    Microsoft Windows netbios-ssn
+389/tcp   open     ldap           Microsoft Windows Active Directory LDAP (Domain: MEGACORP.LOCAL0., Site: Default-First-Site-Name)
+445/tcp   open     microsoft-ds?
+464/tcp   open     kpasswd5?
+548/tcp   filtered afp
+593/tcp   open     ncacn_http     Microsoft Windows RPC over HTTP 1.0
+636/tcp   open     tcpwrapped
+683/tcp   filtered corba-iiop
+1233/tcp  filtered univ-appserver
+1300/tcp  filtered h323hostcallsc
+1812/tcp  filtered radius
+3268/tcp  open     ldap           Microsoft Windows Active Directory LDAP (Domain: MEGACORP.LOCAL0., Site: Default-First-Site-Name)
+3269/tcp  open     tcpwrapped
+3945/tcp  filtered emcads
+4000/tcp  filtered remoteanything
+4321/tcp  filtered rwhois
+5432/tcp  filtered postgresql
+5911/tcp  filtered cpdlc
+8086/tcp  filtered d-s-n
+8193/tcp  filtered sophos
+9485/tcp  filtered unknown
+20222/tcp filtered ipulse-ics
+41511/tcp filtered unknown
+49154/tcp filtered unknown
+54045/tcp filtered unknown
+65000/tcp filtered unknown
+Service Info: Host: PATHFINDER; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+|_clock-skew: 7h14m07s
+| smb2-security-mode: 
+|   2.02: 
+|_    Message signing enabled and required
+| smb2-time: 
+|   date: 2021-09-18T05:04:54
+|_  start_date: N/A
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Fri Sep 17 17:51:01 2021 -- 1 IP address (1 host up) scanned in 107.62 seconds
